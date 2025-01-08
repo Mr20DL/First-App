@@ -7,7 +7,10 @@ export default function Index() {
         flex: 1,
       }}
     >
-      <Text>Hola</Text>
+      <Text style={{
+        fontFamily: 'merri',
+        fontSize: 40,
+      }}>Hola</Text>
     </View>
   );
 }
