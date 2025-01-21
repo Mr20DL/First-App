@@ -1,7 +1,14 @@
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
+import * as SecureStore from 'expo-secure-store';
+import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
+
+
 
 export default function RootLayout() {
+
+  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
+
 
   useFonts({
     'merri':require('./../assets/fonts/MerriweatherSans-Regular.ttf'),
@@ -10,6 +17,7 @@ export default function RootLayout() {
   })
 
   return (
+    <ClerkProvider publishableKey={publishableKey}>
     <Stack>
       <Stack.Screen name="index" />
       <Stack.Screen name="login/index" 
@@ -18,5 +26,6 @@ export default function RootLayout() {
       }}/>
       
     </Stack>
-  )
+    </ClerkProvider>
+  );
 }

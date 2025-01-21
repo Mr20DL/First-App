@@ -4,11 +4,14 @@ import Colors from './../../constants/Colors'
 
 export default function LoginScreen() {
   return (
-    <View>
+    <View style={{
+      backgroundColor:Colors.WHITE,
+      height:'100%'
+    }}>
       <Image source={require('./../../assets/images/wallpaper-preview.jpg')}
         style={{
           width:'100%',
-          height:520
+          height:400
         }}
       />
       <View style={{
@@ -35,7 +38,11 @@ export default function LoginScreen() {
           width:'100%',
           borderRadius:14
         }}>
-          <Text>Get Started</Text>
+          <Text style={{
+            fontFamily:'merri-medium',
+            fontSize:20,
+            textAlign:'center'
+          }}>Get Started</Text>
         </Pressable>
       </View>
     </View>
