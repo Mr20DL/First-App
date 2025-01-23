@@ -1,5 +1,5 @@
 import { View, Text, Image, Pressable } from 'react-native'
-import React from 'react'
+import React, { useCallback } from 'react' // Agregamos useCallback aquí
 import Colors from './../../constants/Colors'
 import * as WebBrowser from 'expo-web-browser'
 import { useOAuth } from '@clerk/clerk-expo'
@@ -70,6 +70,7 @@ export default function LoginScreen() {
           color:Colors.GRAY
         }}>Let's discover new pokemon challenges</Text>
         <Pressable
+        onPress={onPress}
         style={{
           padding:14,
           marginTop:100,
