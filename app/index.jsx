@@ -1,8 +1,12 @@
 import { Text , View } from "react-native";
-import { Link, useRootNavigationState } from "expo-router";
+import { Link, Redirect, useRootNavigationState } from "expo-router";
 import { useEffect } from "react";
+import { useUser } from "@clerk/clerk-expo";
 
 export default function Index() {
+
+  const{user}=useUser();
+
   const rootNavigationState=useRootNavigationState()
 
   useEffect(()=>{
@@ -13,17 +17,9 @@ export default function Index() {
     if(!rootNavigationState.key)
       return null;
   }
-  return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
-      <Link href={'/login'}>
-
-      <Text> Go to Login Screen</Text>
-      
-      </Link>
-    </View>
-  );
+  if (user) {
+    return <Redirect href={'/(tabs)/home'} />;
+  } else {
+    return <Redirect href={'/login'} />;
+  }
 }
