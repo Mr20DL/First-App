@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "First-App",
-    "slug": "First-App",
+    "name": "PokeRepo",
+    "slug": "PokeRepo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "PokeRepo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

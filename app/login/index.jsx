@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable } from 'react-native'
+import { View, Text, Image, Pressable, Platform } from 'react-native'
 import React, { useCallback } from 'react' // Agregamos useCallback aquí
 import Colors from './../../constants/Colors'
 import * as WebBrowser from 'expo-web-browser'
@@ -9,38 +9,37 @@ export const useWarmUpBrowser = () => {
   React.useEffect(() => {
     // Warm up the android browser to improve UX
     // https://docs.expo.dev/guides/authentication/#improving-user-experience
-    void WebBrowser.warmUpAsync()
-    return () => {
-      void WebBrowser.coolDownAsync()
+    if(Platform.OS === 'android'){ // Solo en Android
+      void WebBrowser.warmUpAsync()
+      return () => {
+        void WebBrowser.coolDownAsync();
+      };
     }
   }, [])
 }
 
-WebBrowser.maybeCompleteAuthSession()
+WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
-
-  useWarmUpBrowser()
+  useWarmUpBrowser();
   const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' })
 
   const onPress = useCallback(async () => {
     try {
       const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
-        redirectUrl: Linking.createURL('/(tabs)/home', { scheme: 'myapp' }),
+        redirectUrl: Linking.createURL('/(tabs)/home', { scheme: 'PokeRepo' }),
       })
 
       // If sign in was successful, set the active session
       if (createdSessionId) {
-      } else {
-        // Use signIn or signUp returned from startOAuthFlow
-        // for next steps, such as MFA
+        await setActive({ session: createdSessionId});
       }
     } catch (err) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      console.error(JSON.stringify(err, null, 2))
+      console.error('Error during login:', JSON.stringify(err, null, 2))
     }
-  }, [])
+  }, []);
 
   return (
     <View style={{
@@ -86,5 +85,5 @@ export default function LoginScreen() {
         </Pressable>
       </View>
     </View>
-  )
+  );
 }

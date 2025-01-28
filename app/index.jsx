@@ -1,4 +1,4 @@
-import { Text , View } from "react-native";
+import { Text , View, Platform } from "react-native";
 import { Link, Redirect, useRootNavigationState } from "expo-router";
 import { useEffect } from "react";
 import { useUser } from "@clerk/clerk-expo";
@@ -17,9 +17,14 @@ export default function Index() {
     if(!rootNavigationState.key)
       return null;
   }
-  if (user) {
+  if (Platform.OS === 'web'){
+    // En la web, redirige directamente al home sin login
     return <Redirect href={'/(tabs)/home'} />;
-  } else {
-    return <Redirect href={'/login'} />;
+  } else{
+    if (user) {
+      return <Redirect href={'/(tabs)/home'} />;
+    } else {
+      return <Redirect href={'/login'} />;
+    }
   }
 }

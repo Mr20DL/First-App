@@ -1,7 +1,8 @@
+import { Platform } from 'react-native';
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
-import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
+import { ClerkProvider, ClerkLoaded, SignedIn, SignedOut } from '@clerk/clerk-expo';
 
 const tokenCache = {
   async getToken(key){
@@ -12,26 +13,25 @@ const tokenCache = {
       } else{
         console.log('No values stored under key: ' + key)
       }
-      return item
+      return item;
     } catch (error){
       console.error('SecureStore get item error: ', error)
       await SecureStore.deleteItemAsync(key)
-      return null
+      return null;
     }
   },
   async saveToken(key, value){
     try{
-      return SecureStore.setItemAsync(key, value)
+      return SecureStore.setItemAsync(key, value);
     } catch (err) {
-      return
+      console.error('SecureStore save item error: ', err);
+      return;
     }
   },
-}
+};
 
 export default function RootLayout() {
-
-  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
-
+  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
   useFonts({
     'merri':require('./../assets/fonts/MerriweatherSans-Regular.ttf'),
@@ -43,19 +43,23 @@ export default function RootLayout() {
     <ClerkProvider
     tokenCache={tokenCache}
     publishableKey={publishableKey}>
-    <Stack>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="(tabs)"
-      options={{
-        headerShown:false
-      }}
-      />
-      <Stack.Screen name="login/index" 
-      options={{
-        headerShown:false
-      }}
-      />
-      
+    <Stack
+      screenOptions={{
+        headerShown: false, 
+    }}>
+      {Platform.OS === 'web' ? (
+          // Renderiza el contenido principal sin login en web
+          <>
+          <Stack.Screen name="(tabs)" />
+          </>
+      ) : (
+        // Renderiza el login en móvil
+        <>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="login/index" />
+        </>
+      )}
     </Stack>
     </ClerkProvider>
   );
